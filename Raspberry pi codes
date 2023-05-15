@@ -1,0 +1,227 @@
+*BLINKING OF AN LED*
+import RPi.GPIO as g
+from time import sleep
+g.setwarnings(False)
+g.setmode(g.BCM)
+g.setup(8,g.OUT,initial=g.LOW)
+while True:
+g.output(8,g.HIGH)
+print(“LED is ON”)
+sleep(1)
+g.output(8,g.LOW)
+print(“LED is OFF”)
+sleep(1)
+
+
+*ALTERNATE BLINKING OF 2 LEDs*
+import RPi.GPIO as g
+from time import sleep
+g.setwarnings(False)
+g.setmode(g.BCM)
+g.setup(8,g.OUT,initial=g.LOW)
+g.setup(12,g.OUT,initial=g.HIGH)
+while True:
+g.output(8,g.HIGH)
+g.output(12,g.LOW)
+print(“LED 1 is ON”)
+print(“LED 2 is OFF”)
+sleep(1)
+g.output(8,g.LOW)
+g.output(12,g.HIGH)
+print(“LED 1 is OFF”)
+print(“LED 2 is ON”)
+sleep(1)
+
+
+*RASPBERRY PI CAMERA MODULE*
+
+import picamera
+
+import time
+
+camera = picamera PiCamera()
+
+camera.capture(‘photo1.jpg’)
+
+camera.vflip=True
+
+camera.capture(‘photo2.jpg’)
+
+camera.start_recording(‘video1.h264’)
+
+time.sleep(5)
+
+camera.stop_recording()
+
+To view the video type omxplayer video1.h264
+
+
+*TEMPERATURE AND HUMIDITY SENSOR*
+
+Connection : Vcc - +5V
+
+GND - GND
+
+Data - GPIO4
+
+import sys
+
+import AdaFruit_DHT
+
+import time
+
+while True:
+
+humidity,temp=AdaFruit_DHT,read_retry(22,4)
+
+print(temp)
+
+print(humidity)
+
+time.sleep(1)
+
+
+*DISTANCE SENSOR*
+
+Connection : Vcc - +5V
+
+GND - GND
+
+TRIGGER - GPIO4(output)
+
+ECHO - GPIO18(input)
+
+import RPi.GPIO as g
+
+import time
+
+g.setmode(g.BCM)
+
+TRIG=4
+
+ECHO=18
+
+g.setup(TRIG,g.OUT)
+
+g.setup(ECHO,g.IN)
+
+g.output(TRIG,True)
+
+time.sleep(0.00001)
+
+g.output(TRIG,False)
+
+while g.input(ECHO)==False:
+
+start=time.time()
+
+while g.input(ECHO)==True:
+
+end=time.time()
+
+sig_time=end-start
+
+distance=sig_time/0.000058
+
+print(distance)
+
+g.cleanup()
+
+
+*GARAGE SPOTLIGHT*
+
+import RPi.GPIO as g
+
+import time
+
+g.setmode(g.BCM)
+
+TRIG=4
+
+ECHO=18
+
+RED=22
+
+YELLOW=17
+
+GREEN=15
+
+g.setup(TRIG,g.OUT)
+
+g.setup(ECHO,g.IN)
+
+g.setup(RED,g.OUT)
+
+g.setup(GREEN,g.OUT)
+
+g.setup(YELLOW,g.OUT)
+
+def red_light():
+
+g.ouput(RED,g.HIGH)
+
+g.ouput(GREEN,g.LOW)
+
+g.ouput(YELLOW,g.LOW)
+
+def yellow_light():
+
+g.ouput(RED,g.LOW)
+
+g.ouput(GREEN,g.LOW)
+
+g.ouput(YELLOW,g.HIGH)
+
+def green_light():
+
+g.ouput(RED,g.LOW)
+
+g.ouput(GREEN,g.HIGH)
+
+g.ouput(YELLOW,g.LOW)
+
+def get_distanace():
+
+g.output(TRIG,True)
+
+time.sleep(0.00001)
+
+g.output(TRIG,False)
+
+while g.input(ECHO)==False:
+
+start=time.time()
+
+while g.input(ECHO)==True:
+
+end=time.time()
+
+sig_time=end-start
+
+distance=sig_time/0.000058
+
+return(distance)
+
+while True:
+
+distance=get_distance()
+
+time.sleep()
+
+print(distence)
+
+if distance>=30:
+
+green_light()
+
+elif 30>distance>10:
+
+yellow_light()
+
+elif distance<10:
+
+red_light()
+
+else:
+
+print(“error”)
